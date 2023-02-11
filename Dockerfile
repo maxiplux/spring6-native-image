@@ -1,4 +1,4 @@
-FROM ghcr.io/graalvm/graalvm-ce:ol7-java11-21.2.0 AS build
+FROM fedora:latest AS build
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 # For SDKMAN to work we need unzip & zip
@@ -6,18 +6,18 @@ RUN yum install -y unzip zip
 RUN yum install curl bash unzip zip -y
 RUN curl -s "https://get.sdkman.io" | bash
 
-RUN chmod +x "/home/gradle/src/sdkman-init.sh"
-RUN "/home/gradle/src/sdkman-init.sh";
-RUN gu install native-image;
 
-RUN source "/root/.sdkman/bin/sdkman-init.sh"
-RUN ls -l "/root/.sdkman/bin/"
-RUN source "/root/.sdkman/bin/sdkman-init.sh" sdk install gradle
-RUN source "/root/.sdkman/bin/sdkman-init.sh" gradle --version
-RUN  gu install native-image
-RUN native-image --version
-RUN source "/root/.sdkman/bin/sdkman-init.sh"   gradle nativeCompile --exclude-task test  --exclude-task test
-RUN ls -l "/home/gradle/src/build/native/nativeCompile/"
+
+
+
+RUN source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+RUN source "$HOME/.sdkman/bin/sdkman-init.sh" sdk install gradle
+RUN source "$HOME/.sdkman/bin/sdkman-init.sh" gradle --version
+RUN  source "$HOME/.sdkman/bin/sdkman-init.sh" gu install native-image;
+#RUN native-image --version
+RUN source "$HOME/.sdkman/bin/sdkman-init.sh"   gradle nativeCompile --exclude-task test  --exclude-task test
+
 FROM oraclelinux:7-slim
 
 EXPOSE 8080
