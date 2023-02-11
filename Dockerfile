@@ -26,8 +26,8 @@ COPY --from=build /home/gradle/src/build/native/nativeCompile/*  /workdir/
 
 #CMD [ "sh", "-c", "./spring-boot-graal -Dserver.port=$PORT" ]
 #ENTRYPOINT ["./workdir/auth-final-2023"]
-#ENTRYPOINT ["./workdir/auth-final-2023"]
-CMD [ "sh", "-c", "./workdir/auth-final-2023" ]
+ENTRYPOINT ["./workdir/auth-final-2023"]
+#CMD [ "sh", "-c", "./workdir/auth-final-2023" ]
 
 
 #If you are here reading this, I would like to thank you for your time and effort. I hope this article was helpful to you. If you have any questions or suggestions, please feel free to leave a comment below. I will try to answer them as soon as possible.
@@ -37,9 +37,9 @@ CMD [ "sh", "-c", "./workdir/auth-final-2023" ]
 #docker build -t maxiplux/native.quantum.app . && docker run -it maxiplux/native.quantum.app  tail -f /dev/null
 
 #docker run  -p 8080:8080 maxiplux/native.quantum.app:1.0.0
-#docker tag  e0e2e41e5245 maxiplux/native.quantum.app:1.0.0
+#docker tag  711e5f177926 maxiplux/native.quantum.app:1.0.1
 #docker tag  39d440f82330 maxiplux/livemarket.business.b2bcart:kuerbernetes
-#docker push maxiplux/native.quantum.app:1.0.0
+#docker push maxiplux/native.quantum.app:1.0.1
 #docker push maxiplux/io.core.app:1.0.0
 #docker push maxiplux/io.api.base:master .
 #docker buildx build --platform linux/amd64,linux/arm64 maxiplux/io.api.base:1.0.0 --push -t maxiplux/io.api.base:1.0.0
