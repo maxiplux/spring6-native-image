@@ -26,13 +26,13 @@ COPY --from=build /home/gradle/src/build/native/nativeCompile/auth-final-2023  /
 
 #CMD [ "sh", "-c", "./spring-boot-graal -Dserver.port=$PORT" ]
 
-ENTRYPOINT ["sh","/app/spring-boot-application.jar"]
+ENTRYPOINT ["sh","/workdir/spring-boot-application.jar"]
 
 
 
 #docker build -t maxiplux/native.quantum.app .
 
-#docker build -t maxiplux/native.quantum.app . && docker docker run -it maxiplux/native.quantum.app  tail -f /dev/null
+#docker build -t maxiplux/native.quantum.app . && docker run -it maxiplux/native.quantum.app  tail -f /dev/null
 
 #docker run  -p 8080:8080 maxiplux/native.quantum.app:1.0.0
 #docker tag  e0e2e41e5245 maxiplux/native.quantum.app:1.0.0
