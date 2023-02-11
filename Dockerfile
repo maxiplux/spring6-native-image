@@ -1,30 +1,28 @@
-FROM fedora:latest AS build
+FROM ghcr.io/graalvm/graalvm-ce:22.3.1 as build
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 # For SDKMAN to work we need unzip & zip
-RUN yum install -y unzip zip
-RUN yum install curl bash unzip zip -y
-RUN curl -s "https://get.sdkman.io" | bash
+
+RUN microdnf  install -y unzip zip wget
+RUN wget https://services.gradle.org/distributions/gradle-7.6-bin.zip -P /tmp
+RUN unzip -d /opt/gradle /tmp/gradle-*.zip
+RUN export GRADLE_HOME=/opt/gradle/gradle-7.6
+RUN export PATH=${GRADLE_HOME}/bin:${PATH}
+#RUN gu install gradle
+RUN gu install  native-image
+RUN native-image --version
+RUN /opt/gradle/gradle-7.6/bin/gradle --version
+RUN /opt/gradle/gradle-7.6/bin/gradle nativeCompile
 
 
-
-
-
-RUN source "$HOME/.sdkman/bin/sdkman-init.sh"
-
-RUN source "$HOME/.sdkman/bin/sdkman-init.sh" sdk install gradle
-RUN source "$HOME/.sdkman/bin/sdkman-init.sh" gradle --version
-RUN  source "$HOME/.sdkman/bin/sdkman-init.sh" gu install native-image;
-#RUN native-image --version
-RUN source "$HOME/.sdkman/bin/sdkman-init.sh"   gradle nativeCompile --exclude-task test  --exclude-task test
-
-FROM oraclelinux:7-slim
+FROM ghcr.io/graalvm/graalvm-ce:22.3.1
 
 EXPOSE 8080
 
-RUN mkdir /app
-
-COPY --from=build /home/gradle/src/build/native/nativeCompile/auth-final-2023  /app/spring-boot-application.jar
+#RUN rm -rf /app
+#RUN mkdir /app
+WORKDIR /workdir
+COPY --from=build /home/gradle/build/native/nativeCompile/auth-final-2023  /workdir/spring-boot-application.jar
 
 #CMD [ "sh", "-c", "./spring-boot-graal -Dserver.port=$PORT" ]
 
