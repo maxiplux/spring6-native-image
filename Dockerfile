@@ -15,12 +15,10 @@ RUN /opt/gradle/gradle-7.6/bin/gradle --version
 RUN /opt/gradle/gradle-7.6/bin/gradle nativeCompile
 RUN ls /home/gradle/src/build/native/nativeCompile/
 
-FROM ghcr.io/graalvm/graalvm-ce:22.3.1
-
+FROM alpine:latest
 EXPOSE 8080
-
-#RUN rm -rf /app
-#RUN mkdir /app
+RUN rm -rf /app
+RUN mkdir /app
 WORKDIR /workdir
 COPY --from=build /home/gradle/src/build/native/nativeCompile/auth-final-2023  /workdir/auth-final-2023
 
