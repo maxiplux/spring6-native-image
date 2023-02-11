@@ -14,7 +14,9 @@ services:
     ports:
       - 127.0.0.1:5432:5432
   app:
-    image: maxiplux/native.quantum.app:1.0.2
+    image: native.quantum.app
+    build: .
+    command: /workdir/auth-final-2023
     # volumes:
     #   - ~/volumes/jhipster/baseapi/postgresql/:/var/lib/postgresql/data/
     environment:

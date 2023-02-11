@@ -27,7 +27,7 @@ COPY --from=build /home/gradle/src/build/native/nativeCompile/*  /workdir/
 #CMD [ "sh", "-c", "./spring-boot-graal -Dserver.port=$PORT" ]
 #ENTRYPOINT ["./workdir/auth-final-2023"]
 #ENTRYPOINT ["./workdir/auth-final-2023"]
-CMD [ "bash", "-c", "./workdir/auth-final-2023" ]
+CMD [ "/workdir/auth-final-2023" ]
 
 
 #If you are here reading this, I would like to thank you for your time and effort. I hope this article was helpful to you. If you have any questions or suggestions, please feel free to leave a comment below. I will try to answer them as soon as possible.
