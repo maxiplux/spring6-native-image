@@ -22,7 +22,7 @@ EXPOSE 8080
 #RUN rm -rf /app
 #RUN mkdir /app
 WORKDIR /workdir
-COPY --from=build /home/gradle/build/native/nativeCompile/auth-final-2023  /workdir/spring-boot-application.jar
+COPY --from=build /home/gradle/src/build/native/nativeCompile/auth-final-2023  /workdir/spring-boot-application.jar
 
 #CMD [ "sh", "-c", "./spring-boot-graal -Dserver.port=$PORT" ]
 
