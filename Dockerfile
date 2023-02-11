@@ -13,7 +13,7 @@ RUN gu install  native-image
 RUN native-image --version
 RUN /opt/gradle/gradle-7.6/bin/gradle --version
 RUN /opt/gradle/gradle-7.6/bin/gradle nativeCompile
-
+RUN ls /home/gradle/src/build/native/nativeCompile/
 
 FROM ghcr.io/graalvm/graalvm-ce:22.3.1
 
@@ -22,11 +22,12 @@ EXPOSE 8080
 #RUN rm -rf /app
 #RUN mkdir /app
 WORKDIR /workdir
-COPY --from=build /home/gradle/src/build/native/nativeCompile/auth-final-2023  /workdir/spring-boot-application.jar
+COPY --from=build /home/gradle/src/build/native/nativeCompile/auth-final-2023  /workdir/auth-final-2023
 
 #CMD [ "sh", "-c", "./spring-boot-graal -Dserver.port=$PORT" ]
 
-ENTRYPOINT ["sh","/workdir/spring-boot-application.jar"]
+#ENTRYPOINT ["sh","/workdir/auth-final-2023"]
+CMD [ "sh", "-c", "./workdir/auth-final-2023" ]
 
 
 
