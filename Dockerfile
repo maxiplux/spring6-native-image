@@ -15,7 +15,7 @@ RUN /opt/gradle/gradle-7.6/bin/gradle --version
 RUN /opt/gradle/gradle-7.6/bin/gradle nativeCompile
 
 
-FROM ubuntu:20.04
+FROM ghcr.io/graalvm/graalvm-ce:22.3.1
 EXPOSE 8080
 RUN rm -rf /workdir
 RUN mkdir /workdir
