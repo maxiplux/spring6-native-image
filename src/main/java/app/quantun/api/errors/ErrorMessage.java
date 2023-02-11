@@ -1,4 +1,4 @@
-package io.core.app.errors;
+package app.quantun.api.errors;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

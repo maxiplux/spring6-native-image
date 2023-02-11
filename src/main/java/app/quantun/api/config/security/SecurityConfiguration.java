@@ -1,6 +1,5 @@
-package com.alibou.security.config;
+package app.quantun.api.config.security;
 
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,8 +24,8 @@ public class SecurityConfiguration {
         .csrf()
         .disable()
         .authorizeHttpRequests()
-        .requestMatchers("/api/v1/auth/**")
-        .permitAll()
+
+        .requestMatchers("/api/v1/auth/**","/docs/**","/actuator/**","/swagger-ui.html","/api/v1/swagger-ui.html","/api/v1/docs/**").permitAll()
         .anyRequest()
         .authenticated()
         .and()
@@ -34,6 +33,7 @@ public class SecurityConfiguration {
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
         .authenticationProvider(authenticationProvider)
+
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();

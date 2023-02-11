@@ -1,10 +1,17 @@
-package com.alibou.security.auth;
+package app.quantun.api.services.impl;
 
-import com.alibou.security.config.JwtService;
-import com.alibou.security.user.Role;
-import com.alibou.security.user.User;
-import com.alibou.security.user.UserRepository;
+
+import app.quantun.api.config.security.JwtService;
+import app.quantun.api.models.dtos.AuthenticationUserDto;
+import app.quantun.api.models.dtos.AuthenticationTokenDto;
+import app.quantun.api.models.dtos.RefreshTokenDto;
+import app.quantun.api.models.dtos.RegisterUserDto;
+import app.quantun.api.repositories.UserRepository;
+import app.quantun.api.models.Role;
+import app.quantun.api.models.User;
+import app.quantun.api.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,13 +19,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
-  private final UserRepository repository;
+public class AuthenticationServiceImpl implements AuthenticationService {
+  private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
-
-  public AuthenticationResponse register(RegisterRequest request) {
+  @Override
+  public AuthenticationTokenDto register(RegisterUserDto request) {
     var user = User.builder()
         .firstname(request.getFirstname())
         .lastname(request.getLastname())
@@ -26,25 +33,50 @@ public class AuthenticationService {
         .password(passwordEncoder.encode(request.getPassword()))
         .role(Role.USER)
         .build();
-    repository.save(user);
+    userRepository.save(user);
+
     var jwtToken = jwtService.generateToken(user);
-    return AuthenticationResponse.builder()
-        .token(jwtToken)
+    return AuthenticationTokenDto.builder()
+        .access_token(jwtToken)
+        .build();
+  }
+  @Override
+  public AuthenticationTokenDto authenticate(AuthenticationUserDto request) {
+    authenticationManager.authenticate(        new UsernamePasswordAuthenticationToken(            request.getEmail(),            request.getPassword()        )    );
+    var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+
+    var jwtToken = jwtService.generateToken(user);
+    var refreshToken = jwtService.generateFreshToken(user);
+
+    return AuthenticationTokenDto.builder()
+            .access_token(jwtToken)
+            .token_type("Bearer")
+            .refresh_token(refreshToken)
         .build();
   }
 
-  public AuthenticationResponse authenticate(AuthenticationRequest request) {
-    authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(
-            request.getEmail(),
-            request.getPassword()
-        )
-    );
-    var user = repository.findByEmail(request.getEmail())
-        .orElseThrow();
+  @Override
+  public Long count() {
+    return this.userRepository.count();
+  }
+
+  @Override
+  public User save(User user) {
+    return this.userRepository.save(user);
+  }
+
+  @Override
+  public AuthenticationTokenDto authenticate(RefreshTokenDto request) {
+    var username = jwtService.getUsernameFromToken(request.getRefreshToken());
+    User user = userRepository.findByEmail(username).orElseThrow(() -> new AccessDeniedException("Invalid User not found"));
+
     var jwtToken = jwtService.generateToken(user);
-    return AuthenticationResponse.builder()
-        .token(jwtToken)
+    var refreshToken = jwtService.generateFreshToken(user);
+
+    return AuthenticationTokenDto.builder()
+            .access_token(jwtToken)
+            .token_type("Bearer")
+            .refresh_token(refreshToken)
         .build();
   }
 }

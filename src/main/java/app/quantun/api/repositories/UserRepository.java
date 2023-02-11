@@ -1,8 +1,12 @@
-package com.alibou.security.user;
+package app.quantun.api.repositories;
+
+import app.quantun.api.models.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
 
+@Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
   Optional<User> findByEmail(String email);

@@ -1,4 +1,4 @@
-package com.alibou.security.auth;
+package app.quantun.api.models.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class RegisterUserDto {
 
   private String firstname;
   private String lastname;

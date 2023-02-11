@@ -1,17 +1,16 @@
-package io.core.app.controllers;
+package app.quantun.api.controller;
 
-import io.core.app.errors.ErrorMessage;
-import io.core.app.exceptions.ResourceNotFoundException;
-
-import org.springframework.http.HttpHeaders;
+import app.quantun.api.errors.ErrorMessage;
+import app.quantun.api.exceptions.InvalidTokenException;
+import app.quantun.api.models.dtos.AuthenticationTokenDto;
+import app.quantun.api.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Date;
 
@@ -55,4 +54,32 @@ public class CustomControllerAdvice {
 
         return message;
     }
+
+    @ExceptionHandler({BadCredentialsException.class})
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public ErrorMessage globalExceptionHandlerBadCredentialsException(Exception ex, WebRequest request) {
+
+        ErrorMessage message = new ErrorMessage(
+                HttpStatus.UNAUTHORIZED.value(),
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false));
+
+        return message;
+    }
+
+    @ExceptionHandler({InvalidTokenException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorMessage globalExceptionHandlerBadRequest(Exception ex, WebRequest request) {
+
+        ErrorMessage message = new ErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false));
+
+        return message;
+    }
+
+
 }

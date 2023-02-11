@@ -1,4 +1,4 @@
-package io.core.app.exceptions;
+package app.quantun.api.exceptions;
 /**
  * User: franc
  * Date: 09/09/2018

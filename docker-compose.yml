@@ -2,6 +2,7 @@
 version: '3.8'
 services:
   db:
+
     image: postgres:15.0
     # volumes:
     #   - ~/volumes/jhipster/baseapi/postgresql/:/var/lib/postgresql/data/

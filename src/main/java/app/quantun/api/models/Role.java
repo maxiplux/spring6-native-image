@@ -1,4 +1,4 @@
-package com.alibou.security.user;
+package app.quantun.api.models;
 
 public enum Role {
 

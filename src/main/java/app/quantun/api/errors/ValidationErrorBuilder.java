@@ -1,4 +1,4 @@
-package io.core.app.errors;
+package app.quantun.api.errors;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;

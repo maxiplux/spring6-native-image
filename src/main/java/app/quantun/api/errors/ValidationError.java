@@ -1,4 +1,4 @@
-package io.core.app.errors;
+package app.quantun.api.errors;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
